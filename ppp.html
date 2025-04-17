@@ -133,9 +133,7 @@ input:focus {
     </div>
 
     <script>
-      if (window.location.pathname.endsWith('/ppp.html/')) {
-        window.location.href = window.location.pathname.replace('/ppp.html/', '/ppp.html');
-    }
+
         const dropArea = document.getElementById("dropArea");
         const input = document.getElementById("imageInput");
 
@@ -207,5 +205,10 @@ input:focus {
             reader.readAsDataURL(file);
         }
     </script>
+  <script>
+    if (window.location.pathname.endsWith('/ppp.html/')) {
+        window.location.href = window.location.pathname.replace('/ppp.html/', '/ppp.html');
+    }
+</script>
 </body>
 </html>
