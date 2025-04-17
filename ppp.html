@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free PNG to JPG Converter Online | Fast & Easy</title>
+    <meta name="description" content="Convert PNG images to JPG instantly with our free online tool. Fast, high-quality conversions without downloads!">
+    <meta name="keywords" content="PNG to JPG, image converter, online image tool, free image converter">
+    <meta name="author" content="Your Name">
+    <meta name="robots" content="index, follow">
+</head>    
+<style>
+       @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #3a1c71, #ffaf7b);
+    text-align: center;
+    color: white;
+    padding: 50px;
+    transition: 0.3s;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 30px;
+    border-radius: 15px;
+    width: 400px;
+    margin: auto;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(10px);
+    transition: 0.3s ease-in-out;
+}
+
+.container:hover {
+    transform: scale(1.02);
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+}
+
+.drop-area {
+    border: 2px dashed white;
+    padding: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.drop-area:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    background: #ff5f6d;
+    color: white;
+    transition: 0.3s ease-in-out;
+}
+
+button:hover {
+    background: #ff3a55;
+    transform: scale(1.1);
+    box-shadow: 0px 0px 15px rgba(255, 94, 109, 0.6);
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus {
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.6);
+}
+
+#downloadLink {
+    display: none;
+    margin-top: 15px;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.3);
+    transition: 0.3s ease-in-out;
+    text-decoration: none;
+    color: white;
+}
+
+#downloadLink:hover {
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(1.05);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+</head>
+<body>
+    <h1>PNG to JPG Converter</h1>
+    <div class="container">
+        <div class="drop-area" id="dropArea" onclick="document.getElementById('imageInput').click()">Drag & Drop or Click to Upload</div>
+        <input type="file" id="imageInput" accept="image/png" onchange="showPreview()">
+        <img id="preview">
+        <p id="loader">Converting...</p>
+        <button onclick="convertImage()">Convert to JPG</button>
+        <canvas id="canvas" style="display: none;"></canvas>
+        <a id="downloadLink">Download JPG</a>
+    </div>
+
+    <script>
+        const dropArea = document.getElementById("dropArea");
+        const input = document.getElementById("imageInput");
+
+        dropArea.addEventListener("dragover", (event) => {
+            event.preventDefault();
+            dropArea.style.background = "rgba(255, 255, 255, 0.2)";
+        });
+
+        dropArea.addEventListener("dragleave", () => {
+            dropArea.style.background = "transparent";
+        });
+
+        dropArea.addEventListener("drop", (event) => {
+            event.preventDefault();
+            dropArea.style.background = "transparent";
+            input.files = event.dataTransfer.files;
+            showPreview();
+        });
+
+        function showPreview() {
+            const preview = document.getElementById("preview");
+
+            if (input.files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = "block";
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function convertImage() {
+            const canvas = document.getElementById("canvas");
+            const link = document.getElementById("downloadLink");
+            const loader = document.getElementById("loader");
+
+            if (input.files.length === 0) {
+                alert("Please select a PNG image.");
+                return;
+            }
+
+            loader.style.display = "block";
+
+            const file = input.files[0];
+            const img = new Image();
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                img.src = event.target.result;
+            };
+
+            img.onload = function() {
+                const ctx = canvas.getContext("2d");
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                
+                const jpgData = canvas.toDataURL("image/jpeg", 0.9);
+                
+                link.href = jpgData;
+                link.download = "converted.jpg";
+                link.style.display = "block";
+                loader.style.display = "none";
+
+                link.click(); // Auto-download
+            };
+
+            reader.readAsDataURL(file);
+        }
+    </script>
+</body>
+</html>
